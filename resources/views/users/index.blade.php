@@ -19,9 +19,9 @@
                 <table class="table table-responsive table-striped">
                 <thead>
                     <tr>
-                         <th>Username</th>
+                        <th>Username</th>
                         <th>Name</th>
-                        <th>Email</th>
+                        <td>Email</td>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
@@ -36,10 +36,10 @@
                     <td>
                     <form action="/users/{{$s->id}}" method="post">
                     <a href="/users/{{$s->id}}/edit" class="btn btn-warning">Edit</a>
+                    <a href="/users/{{$s->id}}" class="btn btn-info">View</a>
                     @csrf
                     @method('DELETE')
-                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
-                    <a href="/students/{{$s->id}}/nilai" class="btn btn-info">Nilai</a>
+                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>                    
                     </form>
                     </td>
                 </tr>
@@ -51,4 +51,4 @@
     </div>
     </div>
 </div>
-@endsection
+@endsection 

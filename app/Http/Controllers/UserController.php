@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
+use Auth;
+
 class UserController extends Controller
 {
     /**
@@ -12,12 +14,21 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        //$this->middleware('auth');
+        $this->middleware(function($request, $next){
+            if(Gate::allows('manage-users')) return $next($request);
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+        });
+    }
+
     public function index()
     {
         $users = User::all();
         return view('users.index',['user'=>$users]);
-
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -26,8 +37,8 @@ class UserController extends Controller
     public function create()
     {
         return view('users.create');
-
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -43,6 +54,7 @@ class UserController extends Controller
         ->with('success', 'Add data success!');
 
     }
+
     /**
      * Display the specified resource.
      *
@@ -51,7 +63,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        return view('users.view',['user'=>$user]);
     }
 
     /**
@@ -64,6 +77,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         return view('users.edit',['user'=>$user]);
+
     }
 
     /**
@@ -96,12 +110,6 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
         return redirect()->route('users.index');
+
     }
-    public function __construct() {
-        //$this->middleware('auth');
-        $this->middleware(function($request, $next) {
-            if(Gate::allows('manage-users')) return $next($request);
-            abort(403, 'Anda tidak memiliki cukup hak akses');
-            });
-        }
 }
